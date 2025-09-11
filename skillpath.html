@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SkillPath</title>
+
+  <!-- Preload background if present -->
+  <link rel="preload" as="image" href="skill%20new.jpg">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f9fafb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: all 0.5s ease-in-out;
+      position: relative;
+    }
+
+    body.login-bg {
+      background-image: url("skill%20new.jpg");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      background-blend-mode: overlay;
+      background-attachment: fixed;
+    }
+
+    .card {
+      background: #1f2937;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      width: 350px;
+      text-align: center;
+    }
+
+    #loginPage {
+      position: absolute;
+      right: 48px;
+      left: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 360px;
+    }
+
+    #skillsPage {
+      position: relative;
+      margin: 0 auto;
+    }
+
+    body.login-bg .card {
+      background: rgba(0,0,0,0.55);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px) saturate(110%);
+      -webkit-backdrop-filter: blur(6px) saturate(110%);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    h1, h2 {
+      margin-bottom: 15px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background: rgba(17,24,39,0.85);
+      color: #f9fafb;
+      outline: none;
+    }
+    input::placeholder { color: rgba(249,250,251,0.7); }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: #1d4ed8; }
+
+    .link {
+      margin-top: 10px;
+      display: block;
+      color: #60a5fa;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .info { margin-top: 20px; text-align: left; }
+    .info img { width: 60px; margin-bottom: 10px; }
+    ul { padding-left: 20px; }
+    .small { font-size: 0.9rem; color: #cbd5e1; }
+    .error { color: #ffb4b4; margin-top: 6px; }
+    .success { color: #b6f6c1; margin-top: 6px; }
+    .badge {
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#374151;
+      color:#cbd5e1;
+      font-size:0.85rem;
+      margin-left:8px;
+    }
+
+    /* High-res roadmap image styling */
+    .skill-roadmap {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      margin-top: 12px;
+      border-radius: 8px;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.45);
+      display:block;
+    }
+
+    /* small inline spinner while probing images */
+    .img-probing {
+      display:inline-block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.18);
+      border-top-color: rgba(255,255,255,0.6);
+      animation: spin 1s linear infinite;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width:900px) {
+      #loginPage {
+        position: relative;
+        right: auto;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 92%;
+        margin: 16px auto;
+      }
+      #skillsPage { margin: 16px auto; }
+      .skill-roadmap { max-width: 100%; }
+    }
+
+    @media (max-width:420px) {
+      .card { width: 92%; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login / Signup Section -->
+  <div id="loginPage" class="card">
+    <h2>Welcome-SkillPath</h2>
+
+    <input type="text" id="usernameOrEmail" placeholder="Username or Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <button id="loginBtn">Login</button>
+    <button id="showSignupBtn">Sign Up</button>
+    <button id="skipBtn">Skip Login</button>
+
+    <span class="link" onclick="toggleSignup()">Don’t have an account? Sign up</span>
+
+    <!-- Signup form (hidden by default) -->
+    <div id="signupArea" class="hidden" style="margin-top:12px; text-align:left;">
+      <h3 style="margin:8px 0 6px 0;">Create account</h3>
+      <input type="text" id="su_username" placeholder="Choose a username (no spaces)">
+      <input type="email" id="su_email" placeholder="Email (used to login securely)">
+      <input type="password" id="su_password" placeholder="Password (min 6 chars)">
+      <button id="createAccountBtn">Create Account</button>
+      <div id="signupMsg" class="small"></div>
+    </div>
+
+    <div id="loginMsg" class="error"></div>
+  </div>
+
+  <!-- Skills Section -->
+  <div id="skillsPage" class="card hidden" style="max-width:900px;">
+    <h1>Choose Your Skill</h1>
+    <div style="text-align:left; margin-bottom:10px;">
+      <strong id="welcomeUser">Hello</strong>
+      <span id="userType" class="small" style="display:block;"></span>
+      <span id="tempBadge" class="badge hidden">Temporary account — finalize signup</span>
+    </div>
+
+    <select id="skillSelect" onchange="showSkill()">
+      <option value="">-- Select a Skill --</option>
+      <option value="cpp">💻 C++</option>
+      <option value="html">🌐 HTML</option>
+      <option value="python">🐍 Python</option>
+      <option value="java">☕ Java</option>
+      <option value="php">🐘 PHP</option>
+      <option value="r">📊 R</option>
+    </select>
+    <div class="info" id="skillInfo"></div>
+    <button onclick="backToLogin()">⬅ Back</button>
+  </div>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-functions-compat.js"></script>
+
+  <script>
+    /*******************************
+     *  Firebase Config - REPLACE when ready
+     *******************************/
+    const firebaseConfig = {
+      apiKey: "PASTE_YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+    };
+
+    const FIREBASE_CONFIG_SET = firebaseConfig && firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('PASTE_YOUR');
+
+    let auth = null;
+    let db = null;
+    let functions = null;
+    if (FIREBASE_CONFIG_SET) {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      functions = firebase.functions();
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .catch(err => console.warn('Failed to set persistence:', err && err.message ? err.message : err));
+    }
+
+    /************* Local fallback account (silent) *************/
+    (function ensureLocalFallback() {
+      if (FIREBASE_CONFIG_SET) return;
+      try {
+        const fallbackUser = {
+          username: 'skillpath',
+          password: 'skills',
+          email: 'skillpath.local@example.com',
+          createdAt: Date.now()
+        };
+        localStorage.setItem('local_fallback_user', JSON.stringify(fallbackUser));
+        const namesKey = 'local_usernames';
+        const existing = localStorage.getItem(namesKey);
+        let map = existing ? JSON.parse(existing) : {};
+        map['skillpath'] = fallbackUser.email;
+        localStorage.setItem(namesKey, JSON.stringify(map));
+      } catch (e) {
+        console.warn('Could not create local fallback:', e);
+      }
+    })();
+
+    /************* Skill Data & UI *************/
+    const skillData = {
+      cpp: {
+        title: "C++ Programming",
+        description: "Role in CS: C++ powers operating systems, game engines, and high-performance applications.",
+        benefits: [
+          "High performance and efficiency",
+          "Supports object-oriented programming (OOP)",
+          "Rich Standard Template Library (STL)",
+          "Widely used in system-level programming",
+          "Great for competitive programming and problem-solving"
+        ],
+        img: "https://isocpp.org/assets/images/cpp_logo.png"
+      },
+      html: {
+        title: "HTML",
+        description: "Role in CS: HTML is the backbone of web development, structuring content for the internet.",
+        benefits: [
+          "Easy to learn and implement",
+          "Forms the foundation of every website",
+          "Works with CSS and JavaScript for full web apps",
+          "Cross-platform compatibility",
+          "Supported by all browsers and devices"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg"
+      },
+      python: {
+        title: "Python",
+        description: "Role in CS: Python is vital for AI, data science, and rapid application development.",
+        benefits: [
+          "Readable and beginner-friendly syntax",
+          "Huge standard library and community support",
+          "Excellent for AI, ML, and data science",
+          "Cross-platform and versatile",
+          "Strong integration with modern frameworks"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
+      },
+      java: {
+        title: "Java",
+        description: "Role in CS: Java is central to enterprise systems, Android apps, and large-scale software.",
+        benefits: [
+          "Platform-independent with JVM",
+          "Robust and secure programming model",
+          "Massive ecosystem and libraries",
+          "Strong OOP principles",
+          "Backbone of Android development"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg"
+      },
+      php: {
+        title: "PHP",
+        description: "Role in CS: PHP drives server-side scripting and dynamic web applications.",
+        benefits: [
+          "Great for backend web development",
+          "Easy integration with databases",
+          "Open source with large community",
+          "Fast deployment for web apps",
+          "Powering platforms like WordPress and Facebook"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg"
+      },
+      r: {
+        title: "R Programming",
+        description: "Role in CS: R is crucial for statistical analysis, machine learning, and data visualization.",
+        benefits: [
+          "Advanced statistical computing capabilities",
+          "Rich data visualization tools",
+          "Strong in academia and research",
+          "Integrates with big data frameworks",
+          "Large set of packages for analytics"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg"
+      }
+    };
+
+    // Try multiple filenames to load the roadmap image reliably
+    function probeImageSources(sources, onSuccess, onFail) {
+      let i = 0;
+      function tryNext() {
+        if (i >= sources.length) {
+          if (typeof onFail === 'function') onFail();
+          return;
+        }
+        const src = sources[i++];
+        const img = new Image();
+        img.onload = function() { onSuccess(src); };
+        img.onerror = tryNext;
+        // start loading
+        img.src = src;
+      }
+      tryNext();
+    }
+
+    function showSkill() {
+      const val = document.getElementById("skillSelect").value;
+      const box = document.getElementById("skillInfo");
+      if (!val) {
+        box.innerHTML = "";
+        return;
+      }
+      const data = skillData[val];
+      // base HTML for skill info
+      let html = `
+        <img src="${data.img}" alt="${data.title}" style="width:60px; display:inline-block; vertical-align:middle;">
+        <h2 style="display:inline-block; margin-left:10px; vertical-align:middle;">${data.title}</h2>
+        <p style="margin-top:10px;">${data.description}</p>
+        <h3>Benefits:</h3>
+        <ul>${data.benefits.map(b => `<li>${b}</li>`).join("")}</ul>
+      `;
+      // append ROAD MAP heading for every skill
+      html += `<h3 style="margin-top:14px;">ROAD MAP - ${data.title}</h3>`;
+
+      // placeholder for roadmap area (spinner + eventual image)
+      html += `<div id="roadmapArea"><span id="roadmapSpinner" class="img-probing" style="display:none"></span></div>`;
+
+      box.innerHTML = html;
+
+      // If C++ selected, probe for image files and append the working one
+      if (val === 'cpp') {
+        const area = document.getElementById('roadmapArea');
+        const spinner = document.getElementById('roadmapSpinner');
+        // show spinner while probing
+        spinner.style.display = 'inline-block';
+
+        // candidate filenames in order
+        const candidates = [
+          "c%2B%2B.jpg",   // URL-encoded
+          "c++.jpg",       // literal with plus signs
+          "cpp.jpg"        // safe fallback
+        ];
+
+        probeImageSources(candidates, function(successSrc){
+          // hide spinner
+          spinner.style.display = 'none';
+          // create and append the image using the successful src
+          const img = document.createElement('img');
+          img.className = 'skill-roadmap';
+          img.alt = 'C++ Roadmap';
+          img.src = successSrc;
+          // attempt to load higher-res retina variant if available (optional)
+          // append
+          area.appendChild(img);
+        }, function(){
+          // none loaded: hide spinner and leave area empty (no broken image)
+          spinner.style.display = 'none';
+          // optional: show a friendly note
+          const note = document.createElement('div');
+          note.className = 'small';
+          note.style.marginTop = '8px';
+          note.textContent = 'Roadmap image not found (expected c%2B%2B.jpg, c++.jpg, or cpp.jpg).';
+          area.appendChild(note);
+        });
+      }
+    }
+
+    function goToSkills() {
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("skillsPage").classList.remove("hidden");
+      document.body.classList.remove('login-bg');
+    }
+
+    function backToLogin() {
+      document.getElementById("skillsPage").classList.add("hidden");
+      document.getElementById("loginPage").classList.remove("hidden");
+      document.getElementById("loginMsg").textContent = "";
+      document.body.classList.add('login-bg');
+    }
+
+    /************* Auth UI & Handlers *************/
+    const loginBtn = document.getElementById('loginBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const showSignupBtn = document.getElementById('showSignupBtn');
+    const createAccountBtn = document.getElementById('createAccountBtn');
+
+    function toggleSignup() {
+      const s = document.getElementById('signupArea');
+      s.classList.toggle('hidden');
+    }
+    showSignupBtn.addEventListener('click', toggleSignup);
+
+    function showLoginMsg(text, isError=true) {
+      const el = document.getElementById('loginMsg');
+      el.textContent = text;
+      el.className = isError ? 'error' : 'success';
+    }
+
+    async function handleLogin() {
+      const identifier = document.getElementById('usernameOrEmail').value.trim();
+      const password = document.getElementById('password').value;
+      document.getElementById('loginMsg').textContent = '';
+
+      if (!identifier || !password) {
+        showLoginMsg('Enter username/email and password.');
+        return;
+      }
+
+      if (FIREBASE_CONFIG_SET && auth && db) {
+        try {
+          let emailToUse = identifier;
+          if (!identifier.includes('@')) {
+            const unameKey = identifier.toLowerCase();
+            const unameDoc = await db.collection('usernames').doc(unameKey).get();
+            if (!unameDoc.exists) {
+              showLoginMsg('Username not found.');
+              return;
+            }
+            emailToUse = unameDoc.data().email;
+          }
+          await auth.signInWithEmailAndPassword(emailToUse, password);
+
+          let username = identifier;
+          if (identifier.includes('@')) {
+            const q = await db.collection('users').where('email', '==', emailToUse).limit(1).get();
+            if (!q.empty) username = q.docs[0].data().username || emailToUse;
+            else username = emailToUse;
+          }
+
+          sessionStorage.setItem('userUID', auth.currentUser.uid);
+          sessionStorage.setItem('username', username);
+          sessionStorage.setItem('isGuest', 'false');
+          sessionStorage.setItem('isTempUser', 'false');
+          setWelcome(username, false);
+          resetSkillSelection();
+          goToSkills();
+          return;
+        } catch (err) {
+          console.error(err);
+          showLoginMsg('Login failed: ' + (err.message || err));
+          return;
+        }
+      }
+
+      try {
+        const raw = localStorage.getItem('local_fallback_user');
+        if (!raw) {
+          showLoginMsg('No local account available.');
+          return;
+        }
+        const u = JSON.parse(raw);
+        if ((identifier.toLowerCase() === u.username.toLowerCase() || identifier === u.email) && password === u.password) {
+          sessionStorage.setItem('username', u.username);
+          sessionStorage.setItem('isGuest', 'false');
+          sessionStorage.setItem('isTempUser', 'false');
+          setWelcome(u.username, false);
+          resetSkillSelection();
+          goToSkills();
+        } else {
+          showLoginMsg('Local login failed. Use username "skillpath" and password "skills".');
+        }
+      } catch (e) {
+        console.error('Local fallback login error', e);
+        showLoginMsg('Login error.');
+      }
+    }
+    loginBtn.addEventListener('click', handleLogin);
+
+    function handleSkip() {
+      sessionStorage.setItem('isGuest', 'true');
+      sessionStorage.removeItem('userUID');
+      sessionStorage.setItem('username', 'Guest');
+      sessionStorage.setItem('isTempUser', 'false');
+      setWelcome('Guest', true);
+      resetSkillSelection();
+      goToSkills();
+    }
+    skipBtn.addEventListener('click', handleSkip);
+
+    function setWelcome(name, isGuest) {
+      document.getElementById('welcomeUser').textContent = 'Hello, ' + name;
+      document.getElementById('userType').textContent = isGuest ? 'You are using the app as Guest.' : 'Logged in user';
+      const badge = document.getElementById('tempBadge');
+      const isTemp = sessionStorage.getItem('isTempUser') === 'true';
+      if (isTemp) badge.classList.remove('hidden');
+      else badge.classList.add('hidden');
+    }
+
+    const DRAFT_EXPIRY_MS = 24 * 60 * 60 * 1000;
+    const DRAFT_KEY = 'skillpath_signup_draft';
+
+    function saveSignupDraft() {
+      const username = document.getElementById('su_username').value.trim();
+      const email = document.getElementById('su_email').value.trim();
+      const now = Date.now();
+      const draft = {
+        username: username || null,
+        email: email || null,
+        createdAt: now,
+        status: 'draft'
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }
+
+    function loadSignupDraftIntoForm() {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      try {
+        const draft = JSON.parse(raw);
+        if (!draft || !draft.createdAt) return;
+        if (Date.now() - draft.createdAt > DRAFT_EXPIRY_MS) {
+          localStorage.removeItem(DRAFT_KEY);
+          return;
+        }
+        if (draft.username) document.getElementById('su_username').value = draft.username;
+        if (draft.email) document.getElementById('su_email').value = draft.email;
+        const signupMsg = document.getElementById('signupMsg');
+        signupMsg.textContent = 'We restored your signup draft. Please re-enter password to continue.';
+      } catch (e) {
+        console.warn('Invalid signup draft', e);
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    }
+
+    function resetSkillSelection() {
+      const skillSelect = document.getElementById('skillSelect');
+      const skillInfo = document.getElementById('skillInfo');
+      if (skillSelect) skillSelect.selectedIndex = 0;
+      if (skillInfo) skillInfo.innerHTML = '';
+      localStorage.removeItem('skillpath_lastSkill');
+      sessionStorage.removeItem('lastSkillSelection');
+    }
+
+    window.addEventListener('load', () => {
+      loadSignupDraftIntoForm();
+      resetSkillSelection();
+
+      const username = sessionStorage.getItem('username');
+      const isGuest = sessionStorage.getItem('isGuest') === 'true';
+      const isTemp = sessionStorage.getItem('isTempUser') === 'true';
+      if (username) setWelcome(username, isGuest || isTemp);
+
+      const loginEl = document.getElementById('loginPage');
+      const skillsEl = document.getElementById('skillsPage');
+      if (loginEl && !loginEl.classList.contains('hidden') && skillsEl && skillsEl.classList.contains('hidden')) {
+        document.body.classList.add('login-bg');
+      } else {
+        document.body.classList.remove('login-bg');
+      }
+    });
+  </script>
+
+</body>
+</html>
