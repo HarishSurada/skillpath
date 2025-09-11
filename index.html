@@ -115,7 +115,6 @@
       margin-left:8px;
     }
 
-    /* High-res roadmap image styling */
     .skill-roadmap {
       width: 100%;
       max-width: 900px;
@@ -125,20 +124,6 @@
       box-shadow: 0 6px 30px rgba(0,0,0,0.45);
       display:block;
     }
-
-    /* small inline spinner while probing images */
-    .img-probing {
-      display:inline-block;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 3px solid rgba(255,255,255,0.18);
-      border-top-color: rgba(255,255,255,0.6);
-      animation: spin 1s linear infinite;
-      margin-left: 8px;
-      vertical-align: middle;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     @media (max-width:900px) {
       #loginPage {
@@ -216,9 +201,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-functions-compat.js"></script>
 
   <script>
-    /*******************************
-     *  Firebase Config - REPLACE when ready
-     *******************************/
     const firebaseConfig = {
       apiKey: "PASTE_YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -226,41 +208,16 @@
     };
 
     const FIREBASE_CONFIG_SET = firebaseConfig && firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('PASTE_YOUR');
-
-    let auth = null;
-    let db = null;
-    let functions = null;
+    let auth = null, db = null, functions = null;
     if (FIREBASE_CONFIG_SET) {
       firebase.initializeApp(firebaseConfig);
       auth = firebase.auth();
       db = firebase.firestore();
       functions = firebase.functions();
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .catch(err => console.warn('Failed to set persistence:', err && err.message ? err.message : err));
+        .catch(err => console.warn('Failed to set persistence:', err));
     }
 
-    /************* Local fallback account (silent) *************/
-    (function ensureLocalFallback() {
-      if (FIREBASE_CONFIG_SET) return;
-      try {
-        const fallbackUser = {
-          username: 'skillpath',
-          password: 'skills',
-          email: 'skillpath.local@example.com',
-          createdAt: Date.now()
-        };
-        localStorage.setItem('local_fallback_user', JSON.stringify(fallbackUser));
-        const namesKey = 'local_usernames';
-        const existing = localStorage.getItem(namesKey);
-        let map = existing ? JSON.parse(existing) : {};
-        map['skillpath'] = fallbackUser.email;
-        localStorage.setItem(namesKey, JSON.stringify(map));
-      } catch (e) {
-        console.warn('Could not create local fallback:', e);
-      }
-    })();
-
-    /************* Skill Data & UI *************/
     const skillData = {
       cpp: {
         title: "C++ Programming",
@@ -336,33 +293,11 @@
       }
     };
 
-    // Try multiple filenames to load the roadmap image reliably
-    function probeImageSources(sources, onSuccess, onFail) {
-      let i = 0;
-      function tryNext() {
-        if (i >= sources.length) {
-          if (typeof onFail === 'function') onFail();
-          return;
-        }
-        const src = sources[i++];
-        const img = new Image();
-        img.onload = function() { onSuccess(src); };
-        img.onerror = tryNext;
-        // start loading
-        img.src = src;
-      }
-      tryNext();
-    }
-
     function showSkill() {
       const val = document.getElementById("skillSelect").value;
       const box = document.getElementById("skillInfo");
-      if (!val) {
-        box.innerHTML = "";
-        return;
-      }
+      if (!val) { box.innerHTML = ""; return; }
       const data = skillData[val];
-      // base HTML for skill info
       let html = `
         <img src="${data.img}" alt="${data.title}" style="width:60px; display:inline-block; vertical-align:middle;">
         <h2 style="display:inline-block; margin-left:10px; vertical-align:middle;">${data.title}</h2>
@@ -370,49 +305,17 @@
         <h3>Benefits:</h3>
         <ul>${data.benefits.map(b => `<li>${b}</li>`).join("")}</ul>
       `;
-      // append ROAD MAP heading for every skill
       html += `<h3 style="margin-top:14px;">ROAD MAP - ${data.title}</h3>`;
-
-      // placeholder for roadmap area (spinner + eventual image)
-      html += `<div id="roadmapArea"><span id="roadmapSpinner" class="img-probing" style="display:none"></span></div>`;
-
+      html += `<div id="roadmapArea"></div>`;
       box.innerHTML = html;
 
-      // If C++ selected, probe for image files and append the working one
       if (val === 'cpp') {
         const area = document.getElementById('roadmapArea');
-        const spinner = document.getElementById('roadmapSpinner');
-        // show spinner while probing
-        spinner.style.display = 'inline-block';
-
-        // candidate filenames in order
-        const candidates = [
-          "c%2B%2B.jpg",   // URL-encoded
-          "c++.jpg",       // literal with plus signs
-          "cpp.jpg"        // safe fallback
-        ];
-
-        probeImageSources(candidates, function(successSrc){
-          // hide spinner
-          spinner.style.display = 'none';
-          // create and append the image using the successful src
-          const img = document.createElement('img');
-          img.className = 'skill-roadmap';
-          img.alt = 'C++ Roadmap';
-          img.src = successSrc;
-          // attempt to load higher-res retina variant if available (optional)
-          // append
-          area.appendChild(img);
-        }, function(){
-          // none loaded: hide spinner and leave area empty (no broken image)
-          spinner.style.display = 'none';
-          // optional: show a friendly note
-          const note = document.createElement('div');
-          note.className = 'small';
-          note.style.marginTop = '8px';
-          note.textContent = 'Roadmap image not found (expected c%2B%2B.jpg, c++.jpg, or cpp.jpg).';
-          area.appendChild(note);
-        });
+        const note = document.createElement('div');
+        note.className = 'small';
+        note.style.marginTop = '8px';
+        note.textContent = 'Roadmap content coming soon.';
+        area.appendChild(note);
       }
     }
 
@@ -429,177 +332,23 @@
       document.body.classList.add('login-bg');
     }
 
-    /************* Auth UI & Handlers *************/
     const loginBtn = document.getElementById('loginBtn');
     const skipBtn = document.getElementById('skipBtn');
     const showSignupBtn = document.getElementById('showSignupBtn');
-    const createAccountBtn = document.getElementById('createAccountBtn');
-
-    function toggleSignup() {
-      const s = document.getElementById('signupArea');
-      s.classList.toggle('hidden');
-    }
+    function toggleSignup() { document.getElementById('signupArea').classList.toggle('hidden'); }
     showSignupBtn.addEventListener('click', toggleSignup);
-
-    function showLoginMsg(text, isError=true) {
-      const el = document.getElementById('loginMsg');
-      el.textContent = text;
-      el.className = isError ? 'error' : 'success';
-    }
-
-    async function handleLogin() {
-      const identifier = document.getElementById('usernameOrEmail').value.trim();
-      const password = document.getElementById('password').value;
-      document.getElementById('loginMsg').textContent = '';
-
-      if (!identifier || !password) {
-        showLoginMsg('Enter username/email and password.');
-        return;
-      }
-
-      if (FIREBASE_CONFIG_SET && auth && db) {
-        try {
-          let emailToUse = identifier;
-          if (!identifier.includes('@')) {
-            const unameKey = identifier.toLowerCase();
-            const unameDoc = await db.collection('usernames').doc(unameKey).get();
-            if (!unameDoc.exists) {
-              showLoginMsg('Username not found.');
-              return;
-            }
-            emailToUse = unameDoc.data().email;
-          }
-          await auth.signInWithEmailAndPassword(emailToUse, password);
-
-          let username = identifier;
-          if (identifier.includes('@')) {
-            const q = await db.collection('users').where('email', '==', emailToUse).limit(1).get();
-            if (!q.empty) username = q.docs[0].data().username || emailToUse;
-            else username = emailToUse;
-          }
-
-          sessionStorage.setItem('userUID', auth.currentUser.uid);
-          sessionStorage.setItem('username', username);
-          sessionStorage.setItem('isGuest', 'false');
-          sessionStorage.setItem('isTempUser', 'false');
-          setWelcome(username, false);
-          resetSkillSelection();
-          goToSkills();
-          return;
-        } catch (err) {
-          console.error(err);
-          showLoginMsg('Login failed: ' + (err.message || err));
-          return;
-        }
-      }
-
-      try {
-        const raw = localStorage.getItem('local_fallback_user');
-        if (!raw) {
-          showLoginMsg('No local account available.');
-          return;
-        }
-        const u = JSON.parse(raw);
-        if ((identifier.toLowerCase() === u.username.toLowerCase() || identifier === u.email) && password === u.password) {
-          sessionStorage.setItem('username', u.username);
-          sessionStorage.setItem('isGuest', 'false');
-          sessionStorage.setItem('isTempUser', 'false');
-          setWelcome(u.username, false);
-          resetSkillSelection();
-          goToSkills();
-        } else {
-          showLoginMsg('Local login failed. Use username "skillpath" and password "skills".');
-        }
-      } catch (e) {
-        console.error('Local fallback login error', e);
-        showLoginMsg('Login error.');
-      }
-    }
-    loginBtn.addEventListener('click', handleLogin);
 
     function handleSkip() {
       sessionStorage.setItem('isGuest', 'true');
-      sessionStorage.removeItem('userUID');
       sessionStorage.setItem('username', 'Guest');
-      sessionStorage.setItem('isTempUser', 'false');
-      setWelcome('Guest', true);
-      resetSkillSelection();
+      document.getElementById('welcomeUser').textContent = 'Hello, Guest';
       goToSkills();
     }
     skipBtn.addEventListener('click', handleSkip);
 
-    function setWelcome(name, isGuest) {
-      document.getElementById('welcomeUser').textContent = 'Hello, ' + name;
-      document.getElementById('userType').textContent = isGuest ? 'You are using the app as Guest.' : 'Logged in user';
-      const badge = document.getElementById('tempBadge');
-      const isTemp = sessionStorage.getItem('isTempUser') === 'true';
-      if (isTemp) badge.classList.remove('hidden');
-      else badge.classList.add('hidden');
-    }
-
-    const DRAFT_EXPIRY_MS = 24 * 60 * 60 * 1000;
-    const DRAFT_KEY = 'skillpath_signup_draft';
-
-    function saveSignupDraft() {
-      const username = document.getElementById('su_username').value.trim();
-      const email = document.getElementById('su_email').value.trim();
-      const now = Date.now();
-      const draft = {
-        username: username || null,
-        email: email || null,
-        createdAt: now,
-        status: 'draft'
-      };
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-    }
-
-    function loadSignupDraftIntoForm() {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (!raw) return;
-      try {
-        const draft = JSON.parse(raw);
-        if (!draft || !draft.createdAt) return;
-        if (Date.now() - draft.createdAt > DRAFT_EXPIRY_MS) {
-          localStorage.removeItem(DRAFT_KEY);
-          return;
-        }
-        if (draft.username) document.getElementById('su_username').value = draft.username;
-        if (draft.email) document.getElementById('su_email').value = draft.email;
-        const signupMsg = document.getElementById('signupMsg');
-        signupMsg.textContent = 'We restored your signup draft. Please re-enter password to continue.';
-      } catch (e) {
-        console.warn('Invalid signup draft', e);
-        localStorage.removeItem(DRAFT_KEY);
-      }
-    }
-
-    function resetSkillSelection() {
-      const skillSelect = document.getElementById('skillSelect');
-      const skillInfo = document.getElementById('skillInfo');
-      if (skillSelect) skillSelect.selectedIndex = 0;
-      if (skillInfo) skillInfo.innerHTML = '';
-      localStorage.removeItem('skillpath_lastSkill');
-      sessionStorage.removeItem('lastSkillSelection');
-    }
-
     window.addEventListener('load', () => {
-      loadSignupDraftIntoForm();
-      resetSkillSelection();
-
-      const username = sessionStorage.getItem('username');
-      const isGuest = sessionStorage.getItem('isGuest') === 'true';
-      const isTemp = sessionStorage.getItem('isTempUser') === 'true';
-      if (username) setWelcome(username, isGuest || isTemp);
-
-      const loginEl = document.getElementById('loginPage');
-      const skillsEl = document.getElementById('skillsPage');
-      if (loginEl && !loginEl.classList.contains('hidden') && skillsEl && skillsEl.classList.contains('hidden')) {
-        document.body.classList.add('login-bg');
-      } else {
-        document.body.classList.remove('login-bg');
-      }
+      document.body.classList.add('login-bg');
     });
   </script>
-
 </body>
 </html>
