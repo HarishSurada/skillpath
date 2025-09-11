@@ -125,6 +125,13 @@
       display:block;
     }
 
+    .roadmap-block {
+      background: rgba(255,255,255,0.02);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
     @media (max-width:900px) {
       #loginPage {
         position: relative;
@@ -218,6 +225,7 @@
         .catch(err => console.warn('Failed to set persistence:', err));
     }
 
+    // Roadmap-rich skill data (includes roadmap HTML blocks)
     const skillData = {
       cpp: {
         title: "C++ Programming",
@@ -229,7 +237,41 @@
           "Widely used in system-level programming",
           "Great for competitive programming and problem-solving"
         ],
-        img: "https://isocpp.org/assets/images/cpp_logo.png"
+        img: "https://isocpp.org/assets/images/cpp_logo.png",
+        roadmap: `
+          <div class="roadmap-block">
+            <strong>BASICS</strong>
+            <ul>
+              <li>Data types, variables, I/O</li>
+              <li>Functions</li>
+              <li>Control structures (if/else, loops)</li>
+            </ul>
+            <strong>CONTROL STRUCTURES</strong>
+            <ul>
+              <li>If, switch, for, while</li>
+            </ul>
+            <strong>DATA TYPES</strong>
+            <ul>
+              <li>Primitive types, enums, typedefs</li>
+            </ul>
+            <strong>FUNCTIONS</strong>
+            <ul>
+              <li>Function overloading, default args, inline</li>
+            </ul>
+            <strong>STRINGS</strong>
+            <ul>
+              <li>std::string, c-strings, common operations</li>
+            </ul>
+            <strong>ARRAYS</strong>
+            <ul>
+              <li>Static arrays, std::vector, memory layout</li>
+            </ul>
+            <strong>POINTERS</strong>
+            <ul>
+              <li>Pointer basics, references, dynamic memory, smart pointers</li>
+            </ul>
+          </div>
+        `
       },
       html: {
         title: "HTML",
@@ -241,31 +283,57 @@
           "Cross-platform compatibility",
           "Supported by all browsers and devices"
         ],
-        img: "https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg"
-      },
-      python: {
-        title: "Python",
-        description: "Role in CS: Python is vital for AI, data science, and rapid application development.",
-        benefits: [
-          "Readable and beginner-friendly syntax",
-          "Huge standard library and community support",
-          "Excellent for AI, ML, and data science",
-          "Cross-platform and versatile",
-          "Strong integration with modern frameworks"
-        ],
-        img: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
-      },
-      java: {
-        title: "Java",
-        description: "Role in CS: Java is central to enterprise systems, Android apps, and large-scale software.",
-        benefits: [
-          "Platform-independent with JVM",
-          "Robust and secure programming model",
-          "Massive ecosystem and libraries",
-          "Strong OOP principles",
-          "Backbone of Android development"
-        ],
-        img: "https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg"
+        img: "https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg",
+        roadmap: `
+          <div class="roadmap-block">
+            <h4>HTML Learning Roadmap</h4>
+            <strong>Level 1 - Basics (Foundation)</strong>
+            <ul>
+              <li>What is HTML & how browsers render pages</li>
+              <li>HTML document structure</li>
+              <li>Common tags</li>
+              <li>Text formatting</li>
+              <li>Lists</li>
+              <li>Links</li>
+              <li>Images</li>
+              <li>Basic accessibility</li>
+            </ul>
+
+            <strong>Level 2 - Structure & Content Semantics</strong>
+            <ul>
+              <li>Semantic elements</li>
+              <li>Grouping content</li>
+              <li>Tables</li>
+              <li>Forms & inputs</li>
+              <li>Form attributes</li>
+              <li>HTML5 structural/semantic</li>
+              <li>Audio & video</li>
+              <li>Responsive images</li>
+              <li>Accessibility (a11y)</li>
+              <li>SEO basics</li>
+              <li>Internationalization</li>
+              <li>Progressive enhancement</li>
+            </ul>
+
+            <strong>Level 3 - Integration with CSS & JavaScript (Workflow)</strong>
+            <ul>
+              <li>How HTML, CSS, and JS interact</li>
+              <li>Linking CSS & JS</li>
+              <li>Using data-attributes</li>
+              <li>Accessibility with dynamic content</li>
+            </ul>
+
+            <strong>Level 4 - Modern Tooling, Patterns & Production Practices</strong>
+            <ul>
+              <li>Responsive layout patterns</li>
+              <li>Progressive Web App (PWA) basics</li>
+              <li>Templating & componentization</li>
+              <li>Performance</li>
+              <li>Accessibility audits</li>
+              <li>Deployment basics</li>
+            </ul>
+          </div>
+        `
       },
       php: {
         title: "PHP",
@@ -277,7 +345,55 @@
           "Fast deployment for web apps",
           "Powering platforms like WordPress and Facebook"
         ],
-        img: "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg"
+        img: "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg",
+        roadmap: `
+          <div class="roadmap-block">
+            <h4>PHP Roadmap (5 Levels)</h4>
+
+            <strong>Level 1 - Basics</strong>
+            <ul>
+              <li>Learn HTML, CSS, JavaScript</li>
+              <li>Understand programming concepts (variables, loops, conditionals, functions)</li>
+              <li>Install XAMPP/WAMP/LAMP to run PHP locally</li>
+              <li>Write first PHP scripts: echo, variables, data types</li>
+            </ul>
+
+            <strong>Level 2 - Core PHP</strong>
+            <ul>
+              <li>Control structures: if, switch, for, while</li>
+              <li>Functions & Arrays</li>
+              <li>Forms handling (GET & POST)</li>
+              <li>File handling (read/write)</li>
+              <li>Sessions & Cookies</li>
+            </ul>
+
+            <strong>Level 3 - PHP with Databases</strong>
+            <ul>
+              <li>MySQL basics (CRUD operations)</li>
+              <li>PHP with MySQL / PDO</li>
+              <li>Prepared statements (prevent SQL injection)</li>
+              <li>Build small projects (login form, guestbook, simple blog)</li>
+            </ul>
+
+            <strong>Level 4 - Intermediate & OOP</strong>
+            <ul>
+              <li>Error handling & exceptions</li>
+              <li>File uploads, email sending (PHPMailer)</li>
+              <li>JSON, XML, REST API basics</li>
+              <li>Object-Oriented PHP (Classes, Objects, Inheritance, Interfaces, Traits)</li>
+              <li>Security basics: XSS, CSRF, password hashing</li>
+            </ul>
+
+            <strong>Level 5 - Advanced & Frameworks</strong>
+            <ul>
+              <li>Composer (dependency management)</li>
+              <li>MVC architecture</li>
+              <li>Authentication & Authorization</li>
+              <li>Learn a Framework (Laravel recommended)</li>
+              <li>Build, test & integration</li>
+            </ul>
+          </div>
+        `
       },
       r: {
         title: "R Programming",
@@ -289,28 +405,196 @@
           "Integrates with big data frameworks",
           "Large set of packages for analytics"
         ],
-        img: "https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg"
+        img: "https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg",
+        roadmap: `
+          <div class="roadmap-block">
+            <h4>R Language Learning Roadmap</h4>
+
+            <strong>Level 1: Basics of R</strong>
+            <ul>
+              <li>What is R? Why it's used in statistics & data analysis</li>
+              <li>Install R & RStudio</li>
+              <li>R syntax, variables, data types</li>
+              <li>Vectors, lists, matrices, data frames</li>
+            </ul>
+
+            <strong>Level 2: Data Handling & Visualization</strong>
+            <ul>
+              <li>Import & export data (CSV, Excel, SQL, JSON)</li>
+              <li>Data cleaning (missing values, outliers)</li>
+              <li>dplyr & tidyr (data manipulation)</li>
+              <li>ggplot2 (data visualization) & base plotting</li>
+            </ul>
+
+            <strong>Level 3: Statistics & Probability</strong>
+            <ul>
+              <li>Descriptive statistics (mean, median, variance, SD)</li>
+              <li>Probability distributions (normal, binomial, Poisson)</li>
+              <li>Hypothesis testing (t-test, chi-square, ANOVA)</li>
+            </ul>
+
+            <strong>Level 4: Machine Learning with R</strong>
+            <ul>
+              <li>Data preprocessing for ML</li>
+              <li>Supervised learning: regression, classification (caret, tidymodels)</li>
+              <li>Unsupervised learning: clustering, PCA</li>
+              <li>Time series forecasting (ARIMA, Prophet)</li>
+              <li>Model evaluation & tuning; using R with TensorFlow & Keras</li>
+            </ul>
+
+            <strong>Other Practical Topics</strong>
+            <ul>
+              <li>Writing functions, loops & apply family</li>
+              <li>R packages (install, create, manage)</li>
+              <li>Debugging & error handling</li>
+              <li>Functional programming basics</li>
+              <li>R Markdown for reporting</li>
+            </ul>
+          </div>
+        `
+      },
+      python: {
+        title: "Python",
+        description: "Role in CS: Python is vital for AI, data science, and rapid application development.",
+        benefits: [
+          "Readable and beginner-friendly syntax",
+          "Huge standard library and community support",
+          "Excellent for AI, ML, and data science",
+          "Cross-platform and versatile",
+          "Strong integration with modern frameworks"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+        roadmap: `
+          <div class="roadmap-block">
+            <h4>Python Learning Roadmap</h4>
+
+            <strong>Level 1: Basics</strong>
+            <ul>
+              <li>Install Python & IDE (PyCharm, VS Code, Jupyter)</li>
+              <li>Python syntax & indentation</li>
+              <li>Variables & data types</li>
+            </ul>
+
+            <strong>Level 2: Core Python Concepts</strong>
+            <ul>
+              <li>Functions (def, return, args)</li>
+              <li>Data structures: lists, tuples, sets, dictionaries</li>
+              <li>String manipulation</li>
+              <li>File handling (open, read, write)</li>
+              <li>Exception handling (try/except/finally)</li>
+              <li>Modules & packages (import, pip)</li>
+            </ul>
+
+            <strong>Level 3: Intermediate Python</strong>
+            <ul>
+              <li>List comprehensions</li>
+              <li>Iterators & generators</li>
+              <li>Object-Oriented Programming (OOP)</li>
+              <li>Lambda functions</li>
+              <li>Decorators</li>
+              <li>Regular expressions (re module)</li>
+            </ul>
+
+            <strong>Level 4: Advanced Python & Libraries</strong>
+            <ul>
+              <li>Virtual environments & pipenv</li>
+              <li>Multithreading / multiprocessing</li>
+              <li>Standard libraries (os, sys, datetime, math, random)</li>
+              <li>Functional programming & context managers</li>
+              <li>Type hinting (PEP 484)</li>
+              <li>Web development, cybersecurity tools, IoT projects</li>
+            </ul>
+          </div>
+        `
+      },
+      java: {
+        title: "Java",
+        description: "Role in CS: Java is central to enterprise systems, Android apps, and large-scale software.",
+        benefits: [
+          "Platform-independent with JVM",
+          "Robust and secure programming model",
+          "Massive ecosystem and libraries",
+          "Strong OOP principles",
+          "Backbone of Android development"
+        ],
+        img: "https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg",
+        roadmap: `
+          <div class="roadmap-block">
+            <h4>Java Learning Roadmap</h4>
+
+            <strong>Level 1 - Basics</strong>
+            <ul>
+              <li>Introduction to Java & setup</li>
+              <li>Java syntax</li>
+              <li>Input & output</li>
+              <li>Operators & expressions</li>
+              <li>Control statements (if, switch, loops)</li>
+            </ul>
+
+            <strong>Level 2 - Core Concepts</strong>
+            <ul>
+              <li>Object-Oriented Programming: classes, objects, inheritance, interfaces</li>
+              <li>Collections framework</li>
+              <li>Exception handling</li>
+            </ul>
+
+            <strong>Level 3 - Frameworks & Tools</strong>
+            <ul>
+              <li>Maven/Gradle</li>
+              <li>JUnit (testing)</li>
+              <li>Logging frameworks</li>
+            </ul>
+
+            <strong>Level 4 - Application Development</strong>
+            <ul>
+              <li>Web development with Java (Servlets, JSP, Spring MVC)</li>
+            </ul>
+
+            <strong>Level 5 - Advanced & Deployment</strong>
+            <ul>
+              <li>RESTful APIs</li>
+              <li>Microservices architecture</li>
+              <li>Cloud deployment (AWS)</li>
+            </ul>
+          </div>
+        `
       }
     };
 
+    // showSkill: renders skill info and the roadmap HTML block (no C++ image)
     function showSkill() {
       const val = document.getElementById("skillSelect").value;
       const box = document.getElementById("skillInfo");
       if (!val) { box.innerHTML = ""; return; }
       const data = skillData[val];
+
+      // build top block
       let html = `
-        <img src="${data.img}" alt="${data.title}" style="width:60px; display:inline-block; vertical-align:middle;">
-        <h2 style="display:inline-block; margin-left:10px; vertical-align:middle;">${data.title}</h2>
-        <p style="margin-top:10px;">${data.description}</p>
-        <h3>Benefits:</h3>
-        <ul>${data.benefits.map(b => `<li>${b}</li>`).join("")}</ul>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <img src="${data.img}" alt="${data.title}" style="width:60px; height:60px; object-fit:contain;">
+          <div>
+            <h2 style="margin:0;">${data.title}</h2>
+            <div class="small">${data.description}</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <h3 style="margin-bottom:6px;">Benefits</h3>
+          <ul>${data.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
+        </div>
+
+        <h3 style="margin-top:14px;">ROAD MAP - ${data.title}</h3>
+        <div id="roadmapArea"></div>
       `;
-      html += `<h3 style="margin-top:14px;">ROAD MAP - ${data.title}</h3>`;
-      html += `<div id="roadmapArea"></div>`;
+
       box.innerHTML = html;
 
-      if (val === 'cpp') {
-        const area = document.getElementById('roadmapArea');
+      // insert roadmap HTML if present
+      const area = document.getElementById('roadmapArea');
+      if (data.roadmap) {
+        area.innerHTML = data.roadmap;
+      } else {
+        // fallback note
         const note = document.createElement('div');
         note.className = 'small';
         note.style.marginTop = '8px';
