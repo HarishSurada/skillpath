@@ -6,7 +6,7 @@
   <title>SkillPath</title>
 
   <!-- Preload background if present -->
-  <link rel="preload" as="image" href="skill%20new.jpg">
+  <link rel="preload" as="image" href="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757609577/skillpathnewBackground_xqu8pz.jpg">
 
   <style>
     body {
@@ -23,7 +23,7 @@
     }
 
     body.login-bg {
-      background-image: url("skill%20new.jpg");
+      background-image: url("https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757609577/skillpathnewBackground_xqu8pz.jpg");
       background-repeat: no-repeat;
       background-position: center center;
       background-size: cover;
@@ -115,14 +115,20 @@
       margin-left:8px;
     }
 
+    /* Enlarged roadmap images so content inside is readable.
+       max-width increased and a max-height added so the image is large
+       but still allows scrolling on smaller screens. object-fit ensures clarity. */
     .skill-roadmap {
       width: 100%;
-      max-width: 900px;
+      max-width: 1400px;  /* increased width for readability as requested */
+      max-height: 900px;  /* allow large but not infinite height */
       height: auto;
-      margin-top: 12px;
+      margin-top: 20px;
+      margin-bottom: 20px;
       border-radius: 8px;
       box-shadow: 0 6px 30px rgba(0,0,0,0.45);
-      display:block;
+      display: block;
+      object-fit: contain;
     }
 
     .roadmap-block {
@@ -130,6 +136,10 @@
       padding: 12px;
       border-radius: 8px;
       margin-top: 8px;
+    }
+
+    @media (max-width:1200px) {
+      .skill-roadmap { max-width: 1000px; max-height: 800px; }
     }
 
     @media (max-width:900px) {
@@ -143,11 +153,12 @@
         margin: 16px auto;
       }
       #skillsPage { margin: 16px auto; }
-      .skill-roadmap { max-width: 100%; }
+      .skill-roadmap { max-width: 100%; max-height: 800px; }
     }
 
     @media (max-width:420px) {
       .card { width: 92%; padding: 20px; }
+      .skill-roadmap { max-height: 650px; }
     }
   </style>
 </head>
@@ -225,11 +236,14 @@
         .catch(err => console.warn('Failed to set persistence:', err));
     }
 
-    // Roadmap-rich skill data (includes roadmap HTML blocks)
+    // Skill data updated with additional important descriptive info (no other logic changed)
     const skillData = {
       cpp: {
         title: "C++ Programming",
-        description: "Role in CS: C++ powers operating systems, game engines, and high-performance applications.",
+        description:
+          "Role in CS: C++ powers operating systems, game engines, and high-performance applications. " +
+          "Important: learn manual memory management, RAII (Resource Acquisition Is Initialization), and modern C++ (C++11/14/17/20) practices to write safe and efficient code. " +
+          "Use cases include embedded systems, real-time applications, and performance-critical modules.",
         benefits: [
           "High performance and efficiency",
           "Supports object-oriented programming (OOP)",
@@ -271,11 +285,14 @@
               <li>Pointer basics, references, dynamic memory, smart pointers</li>
             </ul>
           </div>
+          <img src="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757610936/c_qea4gx.jpg" alt="C++ Roadmap" class="skill-roadmap">
         `
       },
       html: {
         title: "HTML",
-        description: "Role in CS: HTML is the backbone of web development, structuring content for the internet.",
+        description:
+          "Role in CS: HTML structures content for the web and is the foundation of front-end development. " +
+          "Important: focus on semantic HTML, accessibility (a11y), and responsive design to build inclusive and maintainable web pages. Combine with CSS and JavaScript for interactive experiences.",
         benefits: [
           "Easy to learn and implement",
           "Forms the foundation of every website",
@@ -333,11 +350,14 @@
               <li>Deployment basics</li>
             </ul>
           </div>
+          <img src="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757610946/HTML_Learning_Roadmap_Guide_qlke9r.png" alt="HTML Roadmap" class="skill-roadmap">
         `
       },
       php: {
         title: "PHP",
-        description: "Role in CS: PHP drives server-side scripting and dynamic web applications.",
+        description:
+          "Role in CS: PHP is a server-side scripting language ideal for building dynamic web backends. " +
+          "Important: learn secure handling of user input, prepared statements, and modern PHP practices with Composer and frameworks (Laravel) for scalable apps.",
         benefits: [
           "Great for backend web development",
           "Easy integration with databases",
@@ -393,11 +413,14 @@
               <li>Build, test & integration</li>
             </ul>
           </div>
+          <img src="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757610965/php_jxl4aj.jpg" alt="PHP Roadmap" class="skill-roadmap">
         `
       },
       r: {
         title: "R Programming",
-        description: "Role in CS: R is crucial for statistical analysis, machine learning, and data visualization.",
+        description:
+          "Role in CS: R excels at statistical analysis, data visualization, and exploratory data science. " +
+          "Important: become familiar with packages (ggplot2, dplyr) and reproducible reports (R Markdown) to communicate data insights effectively.",
         benefits: [
           "Advanced statistical computing capabilities",
           "Rich data visualization tools",
@@ -451,11 +474,14 @@
               <li>R Markdown for reporting</li>
             </ul>
           </div>
+          <img src="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757610990/r_niz52d.jpg" alt="R Roadmap" class="skill-roadmap">
         `
       },
       python: {
         title: "Python",
-        description: "Role in CS: Python is vital for AI, data science, and rapid application development.",
+        description:
+          "Role in CS: Python is essential for AI, data science, scripting and rapid application development. " +
+          "Important: master ecosystem libraries (pandas, numpy, scikit-learn, tensorflow) and best practices like virtual environments and testing to build reliable projects.",
         benefits: [
           "Readable and beginner-friendly syntax",
           "Huge standard library and community support",
@@ -505,11 +531,14 @@
               <li>Web development, cybersecurity tools, IoT projects</li>
             </ul>
           </div>
+          <img src="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757610984/python_ojnuwh.jpg" alt="Python Roadmap" class="skill-roadmap">
         `
       },
       java: {
         title: "Java",
-        description: "Role in CS: Java is central to enterprise systems, Android apps, and large-scale software.",
+        description:
+          "Role in CS: Java powers large enterprise systems, Android apps and cross-platform server software. " +
+          "Important: learn JVM internals, memory model, concurrency primitives and using frameworks (Spring) for production-grade applications.",
         benefits: [
           "Platform-independent with JVM",
           "Robust and secure programming model",
@@ -557,18 +586,38 @@
               <li>Cloud deployment (AWS)</li>
             </ul>
           </div>
+          <img src="https://res.cloudinary.com/dxwfxgn5z/image/upload/v1757610949/java_vhyqwg.jpg" alt="Java Roadmap" class="skill-roadmap">
         `
       }
     };
 
-    // showSkill: renders skill info and the roadmap HTML block (no C++ image)
+    // --- Helpers added:
+    function setWelcome(name, isGuest) {
+      document.getElementById('welcomeUser').textContent = 'Hello, ' + name;
+      document.getElementById('userType').textContent = isGuest ? 'You are using the app as Guest.' : 'Logged in user';
+      const badge = document.getElementById('tempBadge');
+      const isTemp = sessionStorage.getItem('isTempUser') === 'true';
+      if (isTemp) badge.classList.remove('hidden');
+      else badge.classList.add('hidden');
+    }
+
+    function resetSkillSelection() {
+      const skillSelect = document.getElementById('skillSelect');
+      const skillInfo = document.getElementById('skillInfo');
+      if (skillSelect) skillSelect.selectedIndex = 0;
+      if (skillInfo) skillInfo.innerHTML = '';
+      // Keep previous storage behaviour if any
+      try { localStorage.removeItem('skillpath_lastSkill'); } catch (e) {}
+      try { sessionStorage.removeItem('lastSkillSelection'); } catch (e) {}
+    }
+
+    // showSkill: renders skill info and the roadmap HTML block (images are now sized larger)
     function showSkill() {
       const val = document.getElementById("skillSelect").value;
       const box = document.getElementById("skillInfo");
       if (!val) { box.innerHTML = ""; return; }
       const data = skillData[val];
 
-      // build top block
       let html = `
         <div style="display:flex; align-items:center; gap:12px;">
           <img src="${data.img}" alt="${data.title}" style="width:60px; height:60px; object-fit:contain;">
@@ -593,15 +642,194 @@
       const area = document.getElementById('roadmapArea');
       if (data.roadmap) {
         area.innerHTML = data.roadmap;
+        // ensure large images are scrollable on smaller screens
+        const imgs = area.querySelectorAll('.skill-roadmap');
+        imgs.forEach(img => {
+          img.style.display = 'block';
+          img.style.width = '100%';
+          img.style.maxWidth = '1400px';
+          img.style.height = 'auto';
+          img.style.objectFit = 'contain';
+        });
+        // if image is large, allow the page to scroll by ensuring body's overflow is visible
+        document.body.style.overflowY = 'auto';
       } else {
-        // fallback note
         const note = document.createElement('div');
         note.className = 'small';
         note.style.marginTop = '8px';
         note.textContent = 'Roadmap content coming soon.';
         area.appendChild(note);
       }
+
+      // Expand skills container so images don't feel constrained (affects only skills view)
+      const skillsEl = document.getElementById('skillsPage');
+      if (skillsEl) {
+        skillsEl.style.maxWidth = '1400px';
+        skillsEl.style.width = '100%';
+        skillsEl.style.padding = '36px';
+      }
     }
+
+    // --- Auth UI & Handlers (added permanent account & temporary signup)
+    const loginBtn = document.getElementById('loginBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const showSignupBtn = document.getElementById('showSignupBtn');
+    const createAccountBtn = document.getElementById('createAccountBtn');
+
+    function toggleSignup() { document.getElementById('signupArea').classList.toggle('hidden'); }
+    showSignupBtn.addEventListener('click', toggleSignup);
+
+    function showLoginMsg(text, isError=true) {
+      const el = document.getElementById('loginMsg');
+      el.textContent = text;
+      el.className = isError ? 'error' : 'success';
+    }
+
+    // Permanent credentials: username=skillpath, password=skills -> welcome Admin
+    async function handleLogin() {
+      const identifier = document.getElementById('usernameOrEmail').value.trim();
+      const password = document.getElementById('password').value;
+      document.getElementById('loginMsg').textContent = '';
+
+      if (!identifier || !password) {
+        showLoginMsg('Enter username/email and password.');
+        return;
+      }
+
+      // Permanent local admin check (case-insensitive username)
+      if (identifier.toLowerCase() === 'skillpath' && password === 'skills') {
+        // Log in as Admin
+        sessionStorage.setItem('username', 'Admin');
+        sessionStorage.setItem('isGuest', 'false');
+        sessionStorage.setItem('isTempUser', 'false');
+        // mark admin flag (optional)
+        sessionStorage.setItem('isAdmin', 'true');
+
+        setWelcome('Admin', false);
+        resetSkillSelection();
+        goToSkills();
+        return;
+      }
+
+      // If firebase is configured, try firebase flow (preserve your existing logic)
+      if (FIREBASE_CONFIG_SET && auth && db) {
+        try {
+          let emailToUse = identifier;
+          if (!identifier.includes('@')) {
+            const unameKey = identifier.toLowerCase();
+            const unameDoc = await db.collection('usernames').doc(unameKey).get();
+            if (!unameDoc.exists) {
+              showLoginMsg('Username not found.');
+              return;
+            }
+            emailToUse = unameDoc.data().email;
+          }
+          await auth.signInWithEmailAndPassword(emailToUse, password);
+
+          let username = identifier;
+          if (identifier.includes('@')) {
+            const q = await db.collection('users').where('email', '==', emailToUse).limit(1).get();
+            if (!q.empty) username = q.docs[0].data().username || emailToUse;
+            else username = emailToUse;
+          }
+
+          sessionStorage.setItem('userUID', auth.currentUser.uid);
+          sessionStorage.setItem('username', username);
+          sessionStorage.setItem('isGuest', 'false');
+          sessionStorage.setItem('isTempUser', 'false');
+          setWelcome(username, false);
+          resetSkillSelection();
+          goToSkills();
+          return;
+        } catch (err) {
+          console.error(err);
+          showLoginMsg('Login failed: ' + (err.message || err));
+          return;
+        }
+      }
+
+      // Local fallback check (if you rely on fallback user)
+      try {
+        const raw = localStorage.getItem('local_fallback_user');
+        if (!raw) {
+          showLoginMsg('No local account available.');
+          return;
+        }
+        const u = JSON.parse(raw);
+        if ((identifier.toLowerCase() === u.username.toLowerCase() || identifier === u.email) && password === u.password) {
+          sessionStorage.setItem('username', u.username);
+          sessionStorage.setItem('isGuest', 'false');
+          sessionStorage.setItem('isTempUser', 'false');
+          setWelcome(u.username, false);
+          resetSkillSelection();
+          goToSkills();
+        } else {
+          showLoginMsg('Local login failed. Use username "skillpath" and password "skills".');
+        }
+      } catch (e) {
+        console.error('Local fallback login error', e);
+        showLoginMsg('Login error.');
+      }
+    }
+    loginBtn.addEventListener('click', handleLogin);
+
+    // Create account -> store as temporary account (as requested)
+    function handleCreateAccount() {
+      const su_username = document.getElementById('su_username').value.trim();
+      const su_email = document.getElementById('su_email').value.trim();
+      const su_password = document.getElementById('su_password').value;
+
+      const signupMsg = document.getElementById('signupMsg');
+      signupMsg.textContent = '';
+
+      if (!su_username) {
+        signupMsg.textContent = 'Enter a username.';
+        return;
+      }
+      if (!su_email) {
+        signupMsg.textContent = 'Enter an email.';
+        return;
+      }
+      if (!su_password || su_password.length < 6) {
+        signupMsg.textContent = 'Password must be at least 6 characters.';
+        return;
+      }
+
+      // Store temporary signup info in sessionStorage (temporary account)
+      const temp = {
+        username: su_username,
+        email: su_email,
+        createdAt: Date.now(),
+        status: 'temporary'
+      };
+      try {
+        // store small record in session (temporary until user finalizes)
+        sessionStorage.setItem('temp_signup_user', JSON.stringify(temp));
+        sessionStorage.setItem('username', su_username);
+        sessionStorage.setItem('isGuest', 'false');
+        sessionStorage.setItem('isTempUser', 'true');
+        // show badge and go to skills
+        setWelcome(su_username, false);
+        resetSkillSelection();
+        goToSkills();
+      } catch (e) {
+        console.warn('Could not save temporary signup:', e);
+        signupMsg.textContent = 'Failed to create temporary account.';
+      }
+    }
+    createAccountBtn.addEventListener('click', handleCreateAccount);
+
+    // Skip remains guest
+    function handleSkip() {
+      sessionStorage.setItem('isGuest', 'true');
+      sessionStorage.removeItem('userUID');
+      sessionStorage.setItem('username', 'Guest');
+      sessionStorage.setItem('isTempUser', 'false');
+      setWelcome('Guest', true);
+      resetSkillSelection();
+      goToSkills();
+    }
+    skipBtn.addEventListener('click', handleSkip);
 
     function goToSkills() {
       document.getElementById("loginPage").classList.add("hidden");
@@ -614,24 +842,31 @@
       document.getElementById("loginPage").classList.remove("hidden");
       document.getElementById("loginMsg").textContent = "";
       document.body.classList.add('login-bg');
-    }
 
-    const loginBtn = document.getElementById('loginBtn');
-    const skipBtn = document.getElementById('skipBtn');
-    const showSignupBtn = document.getElementById('showSignupBtn');
-    function toggleSignup() { document.getElementById('signupArea').classList.toggle('hidden'); }
-    showSignupBtn.addEventListener('click', toggleSignup);
-
-    function handleSkip() {
-      sessionStorage.setItem('isGuest', 'true');
-      sessionStorage.setItem('username', 'Guest');
-      document.getElementById('welcomeUser').textContent = 'Hello, Guest';
-      goToSkills();
+      // revert skillsPage sizing to default (if showSkill expanded it)
+      const skillsEl = document.getElementById('skillsPage');
+      if (skillsEl) {
+        skillsEl.style.maxWidth = '900px';
+        skillsEl.style.width = '';
+        skillsEl.style.padding = '';
+      }
     }
-    skipBtn.addEventListener('click', handleSkip);
 
     window.addEventListener('load', () => {
-      document.body.classList.add('login-bg');
+      // restore welcome if possible
+      const username = sessionStorage.getItem('username');
+      const isGuest = sessionStorage.getItem('isGuest') === 'true';
+      const isTemp = sessionStorage.getItem('isTempUser') === 'true';
+      if (username) setWelcome(username, isGuest || isTemp);
+
+      // ensure login background shows initially
+      const loginEl = document.getElementById('loginPage');
+      const skillsEl = document.getElementById('skillsPage');
+      if (loginEl && !loginEl.classList.contains('hidden') && skillsEl && skillsEl.classList.contains('hidden')) {
+        document.body.classList.add('login-bg');
+      } else {
+        document.body.classList.remove('login-bg');
+      }
     });
   </script>
 </body>
